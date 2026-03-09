@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useInView, useSpring, useTransform } from "framer-motion";
 import { SECTIONS, TOTAL_POINTS } from "@/lib/sections";
 import type { LeaderboardEntry } from "@/lib/types";
@@ -14,7 +15,7 @@ const MOCK_USER = {
   full_name: "Thomas Crelier",
   avatar_url: "",
   total_points: 250,
-  email: "thomas@clutch.ca",
+  email: "thomas@olivegarden.com",
 };
 
 const MOCK_PROGRESS = ["why-this-matters", "what-is-claude-code"];
@@ -80,10 +81,68 @@ function Avatar({
 
   return (
     <div
-      className={`rounded-full bg-clutch-plum flex items-center justify-center font-display font-bold text-white ${className}`}
+      className={`rounded-full bg-og-brown flex items-center justify-center font-display font-bold text-og-cream ${className}`}
       style={{ width: size, height: size, fontSize: size * 0.38 }}
     >
       {initials}
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   Progress Ring Component
+   ────────────────────────────────────────────── */
+
+function ProgressRing({
+  points,
+  total,
+  size = 120,
+}: {
+  points: number;
+  total: number;
+  size?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true });
+  const strokeWidth = 8;
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const progress = points / total;
+
+  return (
+    <div ref={ref} className="flex flex-col items-center gap-2">
+      <svg width={size} height={size} className="-rotate-90">
+        {/* Background circle */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="#D7D2CB"
+          strokeWidth={strokeWidth}
+        />
+        {/* Progress arc */}
+        <motion.circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="#A8AD00"
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          initial={{ strokeDashoffset: circumference }}
+          animate={inView ? { strokeDashoffset: circumference * (1 - progress) } : {}}
+          transition={{ duration: 1.5, delay: 0.3, ease: "easeOut" }}
+        />
+      </svg>
+      {/* Center text overlay */}
+      <div className="absolute flex flex-col items-center justify-center" style={{ width: size, height: size }}>
+        <span className="font-display font-bold text-2xl text-og-dark leading-none">
+          <AnimatedCounter target={points} />
+        </span>
+        <span className="font-display text-xs text-og-dark/40 leading-none mt-0.5">/{total}</span>
+      </div>
     </div>
   );
 }
@@ -113,133 +172,49 @@ function SectionCard({
     >
       <Link href={`/learn/${section.slug}`} className="group block">
         <div
-          className={`relative h-72 md:h-80 rounded-2xl overflow-hidden transition-all duration-300
-            group-hover:scale-[1.03] group-hover:shadow-[0_0_40px_rgba(255,70,76,0.25)]
-            ${isCompleted ? "opacity-70" : ""}`}
+          className={`cream-card overflow-hidden transition-all duration-300
+            group-hover:-translate-y-1 group-hover:shadow-[0_8px_30px_rgba(28,14,5,0.4)]
+            ${isCompleted ? "border-l-4 border-og-green" : ""}`}
         >
-          {/* Background gradient (placeholder for hero images) */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(135deg, ${section.accentColor}33 0%, #1A0A14 70%)`,
-            }}
-          />
-
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-clutch-dark via-clutch-dark/60 to-transparent" />
-
-          {/* Large faded section number */}
-          <div className="absolute top-3 right-4 font-display font-900 text-[6rem] leading-none text-white/[0.06] select-none">
-            {section.order}
-          </div>
-
-          {/* Points badge */}
-          <div className="absolute top-4 left-4 bg-clutch-red/90 backdrop-blur-sm text-white font-display font-bold text-xs px-3 py-1 rounded-full">
-            {section.points} pts
-          </div>
-
-          {/* Completed checkmark */}
-          {isCompleted && (
-            <div className="absolute top-4 right-4 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M3 8.5L6.5 12L13 4"
-                  stroke="white"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+          {/* Photo banner */}
+          <div className="relative h-40 overflow-hidden">
+            <Image
+              src={`/images/${section.heroImage}`}
+              alt={section.title}
+              fill
+              className="object-cover w-full transition-transform duration-300 group-hover:scale-105"
+            />
+            {/* Points badge — top right */}
+            <div className="absolute top-3 right-3 bg-og-green text-og-dark font-display font-bold text-xs px-3 py-1 rounded-full z-10">
+              {section.points} pts
             </div>
-          )}
+            {/* Completed checkmark — top left */}
+            {isCompleted && (
+              <div className="absolute top-3 left-3 w-7 h-7 bg-og-green rounded-full flex items-center justify-center z-10">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M3 8.5L6.5 12L13 4"
+                    stroke="white"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            )}
+          </div>
 
           {/* Content */}
-          <div className="absolute bottom-0 left-0 right-0 p-6">
-            <h3 className="font-display font-800 text-xl md:text-2xl text-white mb-1.5 tracking-tight">
+          <div className="p-5">
+            <h3 className="font-display font-bold text-lg text-og-dark">
               {section.title}
             </h3>
-            <p className="font-body text-sm text-clutch-lavender/70 leading-relaxed line-clamp-2">
+            <p className="font-body text-sm text-og-dark/60 mt-1 line-clamp-2 leading-relaxed">
               {section.description}
             </p>
           </div>
-
-          {/* Hover border glow */}
-          <div className="absolute inset-0 rounded-2xl border border-white/[0.06] group-hover:border-clutch-red/50 transition-colors duration-300" />
         </div>
       </Link>
-    </motion.div>
-  );
-}
-
-/* ──────────────────────────────────────────────
-   Leaderboard User Card
-   ────────────────────────────────────────────── */
-
-function LeaderboardCard({
-  entry,
-  rank,
-  index,
-}: {
-  entry: LeaderboardEntry;
-  rank: number;
-  index: number;
-}) {
-  const isFirst = rank === 1;
-  const avatarSize = isFirst ? 72 : 52;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.45, delay: index * 0.08 }}
-      className={`flex flex-col items-center gap-2 min-w-[120px] ${isFirst ? "min-w-[160px]" : ""}`}
-    >
-      {/* Avatar with ring */}
-      <div className="relative">
-        {isFirst && (
-          <div
-            className="absolute -inset-2 rounded-full animate-pulse"
-            style={{
-              background:
-                "conic-gradient(from 0deg, #FF464C, #FFD700, #FF464C, #FFD700, #FF464C)",
-              filter: "blur(6px)",
-              opacity: 0.6,
-            }}
-          />
-        )}
-        <div
-          className={`relative rounded-full p-[2px] ${
-            isFirst
-              ? "bg-gradient-to-br from-yellow-400 via-clutch-red to-yellow-400"
-              : rank <= 3
-                ? "bg-clutch-red/60"
-                : "bg-white/20"
-          }`}
-        >
-          <Avatar name={entry.full_name} url={entry.avatar_url} size={avatarSize} />
-        </div>
-        {/* Rank badge */}
-        <div
-          className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center font-display font-bold text-[11px] ${
-            isFirst
-              ? "bg-yellow-400 text-clutch-dark"
-              : rank === 2
-                ? "bg-gray-300 text-clutch-dark"
-                : rank === 3
-                  ? "bg-amber-600 text-white"
-                  : "bg-clutch-dark text-white border border-white/20"
-          }`}
-        >
-          {rank}
-        </div>
-      </div>
-
-      {/* Name & Points */}
-      <p className="font-display font-bold text-white text-sm text-center leading-tight mt-1">
-        {entry.full_name.split(" ")[0]}
-      </p>
-      <p className="font-display text-clutch-red text-xs font-bold">{entry.total_points} pts</p>
     </motion.div>
   );
 }
@@ -251,233 +226,125 @@ function LeaderboardCard({
 export default function DashboardPage() {
   const completedCount = MOCK_PROGRESS.length;
   const totalSections = SECTIONS.length;
-  const progressPercent = (MOCK_USER.total_points / TOTAL_POINTS) * 100;
-
-  const heroRef = useRef<HTMLDivElement>(null);
-  const heroInView = useInView(heroRef, { once: true });
+  const firstName = MOCK_USER.full_name.split(" ")[0];
 
   return (
-    <div className="min-h-screen">
+    <div className="relative z-2 min-h-screen">
       {/* ═══════════════════════════════════════════
-          ZONE 1 — HERO
+          NAV BAR
           ═══════════════════════════════════════════ */}
-      <section ref={heroRef} className="relative min-h-[85vh] bg-clutch-dark overflow-hidden">
-        {/* Subtle radial light */}
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 50% at 50% 20%, rgba(85,14,48,0.4) 0%, transparent 70%)",
-          }}
-        />
-
-        {/* ─── Top Nav ─── */}
-        <motion.nav
-          initial={{ opacity: 0, y: -20 }}
-          animate={heroInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="relative z-10 flex items-center justify-between px-6 md:px-12 py-5"
-        >
-          {/* Logo */}
-          <Link href="/dashboard" className="flex items-baseline gap-0">
-            <span className="font-display font-[800] text-2xl text-white tracking-tighter">
-              clutch
-            </span>
-            <span className="text-clutch-red text-2xl leading-none font-bold">.</span>
+      <nav className="sticky top-0 z-50 bg-og-brown/95 backdrop-blur-sm border-b border-og-brown-light/30 border-b-2 border-b-og-green/40">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 py-3">
+          {/* Left: Logo */}
+          <Link href="/dashboard" className="flex-shrink-0">
+            <Image
+              src="/images/og-extracted/page1-img2.jpg"
+              alt="Olive Garden"
+              width={80}
+              height={40}
+              className="rounded-md h-10 w-auto object-contain"
+            />
           </Link>
 
-          {/* User Info */}
+          {/* Center: Nav links */}
+          <div className="flex items-center gap-6">
+            <Link
+              href="/dashboard"
+              className="font-display text-sm text-og-cream font-bold transition-colors"
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/leaderboard"
+              className="font-display text-sm text-og-warm-gray/60 hover:text-og-cream transition-colors"
+            >
+              Leaderboard
+            </Link>
+          </div>
+
+          {/* Right: User info */}
           <div className="flex items-center gap-3">
             <div className="hidden sm:block text-right">
-              <p className="font-display font-bold text-white text-sm leading-tight">
+              <p className="font-display font-bold text-og-cream text-sm leading-tight">
                 {MOCK_USER.full_name}
               </p>
-              <p className="font-body text-clutch-lavender/60 text-xs">{MOCK_USER.email}</p>
             </div>
-            <Avatar name={MOCK_USER.full_name} url={MOCK_USER.avatar_url} size={38} />
-            <div className="bg-clutch-red/15 border border-clutch-red/30 text-clutch-red font-display font-bold text-xs px-3 py-1 rounded-full">
+            <Avatar name={MOCK_USER.full_name} url={MOCK_USER.avatar_url} size={36} />
+            <div className="bg-og-green/15 border border-og-green/30 text-og-green font-display font-bold text-xs px-3 py-1 rounded-full">
               {MOCK_USER.total_points} pts
             </div>
           </div>
-        </motion.nav>
-
-        {/* ─── Hero Content ─── */}
-        <div className="relative z-10 flex flex-col items-center justify-center px-6 pt-16 pb-24 md:pt-24 md:pb-32">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="font-display font-bold text-clutch-red text-sm uppercase tracking-[0.25em] mb-6"
-          >
-            Claude Code Training Portal
-          </motion.p>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="font-display font-[800] text-5xl md:text-7xl lg:text-8xl text-white text-center leading-[0.95] tracking-tighter max-w-4xl mb-6"
-          >
-            Your Claude Code
-            <br />
-            Journey
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.45 }}
-            className="font-body text-clutch-lavender/80 text-lg md:text-xl text-center max-w-xl mb-14 italic"
-          >
-            Complete all sections. Climb the board. Own the session.
-          </motion.p>
-
-          {/* ─── Progress Bar ─── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.55 }}
-            className="w-full max-w-lg"
-          >
-            {/* Points counter */}
-            <div className="flex items-baseline justify-between mb-3">
-              <div className="font-display font-[800] text-3xl text-white">
-                <AnimatedCounter target={MOCK_USER.total_points} />
-                <span className="text-white/30 font-bold text-lg">/{TOTAL_POINTS}</span>
-              </div>
-              <p className="font-display text-sm text-clutch-lavender/50 font-bold">points</p>
-            </div>
-
-            {/* Bar track */}
-            <div className="relative h-3 bg-white/[0.08] rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={heroInView ? { width: `${progressPercent}%` } : {}}
-                transition={{ duration: 1.2, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
-                className="absolute inset-y-0 left-0 rounded-full"
-                style={{
-                  background: "linear-gradient(90deg, #FF464C 0%, #FF6B70 100%)",
-                  boxShadow: "0 0 20px rgba(255,70,76,0.4)",
-                }}
-              />
-            </div>
-
-            {/* Sections progress */}
-            <p className="font-display text-sm text-clutch-lavender/40 mt-3 text-center">
-              <span className="text-white font-bold">{completedCount}</span>
-              <span className="mx-1">/</span>
-              <span>{totalSections} sections complete</span>
-            </p>
-          </motion.div>
         </div>
-
-        {/* Bottom fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-clutch-plum to-transparent" />
-      </section>
+      </nav>
 
       {/* ═══════════════════════════════════════════
-          ZONE 2 — LEADERBOARD STRIP
+          WELCOME HERO — Cream Banner Card
           ═══════════════════════════════════════════ */}
-      <section className="relative bg-clutch-plum py-14 md:py-20 overflow-hidden">
-        {/* Subtle pattern */}
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{
-            background:
-              "radial-gradient(circle at 20% 50%, rgba(255,70,76,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(241,237,248,0.1) 0%, transparent 50%)",
-          }}
-        />
-
-        <div className="relative z-10 px-6 md:px-12">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="flex items-end justify-between mb-10"
-          >
-            <div>
-              <p className="font-display font-bold text-clutch-red text-xs uppercase tracking-[0.25em] mb-2">
-                Top Performers
+      <section className="relative z-2 px-4 md:px-8 pt-8 md:pt-12">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="cream-card p-8 md:p-12 max-w-5xl mx-auto"
+        >
+          <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-8">
+            {/* Left side: Text */}
+            <div className="text-center md:text-left">
+              <h1 className="script-heading text-3xl md:text-4xl text-og-dark">
+                Welcome back, {firstName}
+              </h1>
+              <p className="font-body text-og-dark/60 mt-3 text-base md:text-lg">
+                Complete all courses to earn your place at the table
               </p>
-              <h2 className="font-display font-[800] text-3xl md:text-4xl text-white tracking-tight">
-                Leaderboard
-              </h2>
             </div>
-            <Link
-              href="/leaderboard"
-              className="font-display font-bold text-sm text-clutch-red hover:text-white transition-colors hidden sm:flex items-center gap-1.5"
-            >
-              View full leaderboard
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="mt-px">
-                <path
-                  d="M6 3L11 8L6 13"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+
+            {/* Right side: Progress ring */}
+            <div className="flex flex-col items-center flex-shrink-0">
+              <div className="relative">
+                <ProgressRing
+                  points={MOCK_USER.total_points}
+                  total={TOTAL_POINTS}
+                  size={120}
                 />
-              </svg>
-            </Link>
-          </motion.div>
-
-          {/* Leaderboard cards — horizontal scroll on mobile, centered on desktop */}
-          <div className="flex items-end justify-center gap-6 md:gap-10 overflow-x-auto pb-4 scrollbar-thin">
-            {MOCK_LEADERBOARD.map((entry, i) => (
-              <LeaderboardCard key={entry.id} entry={entry} rank={i + 1} index={i} />
-            ))}
+              </div>
+              <p className="font-body text-sm text-og-dark/50 mt-3">
+                {completedCount} of {totalSections} courses completed
+              </p>
+            </div>
           </div>
-
-          {/* Mobile link */}
-          <Link
-            href="/leaderboard"
-            className="font-display font-bold text-sm text-clutch-red hover:text-white transition-colors flex items-center justify-center gap-1.5 mt-8 sm:hidden"
-          >
-            View full leaderboard
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="mt-px">
-              <path
-                d="M6 3L11 8L6 13"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
-        </div>
+        </motion.div>
       </section>
 
       {/* ═══════════════════════════════════════════
-          ZONE 3 — SECTION CARDS GRID
+          BREADSTICK PHOTO STRIP
           ═══════════════════════════════════════════ */}
-      <section className="relative bg-clutch-dark py-20 md:py-28">
-        {/* Subtle top accent line */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-clutch-red/30 to-transparent" />
+      <div className="relative z-2 mt-10">
+        <div className="photo-strip">
+          <img
+            src="/images/og-extracted/page5-img5.jpg"
+            alt="Breadsticks and salad"
+          />
+        </div>
+      </div>
 
-        <div className="relative z-10 px-6 md:px-12 max-w-7xl mx-auto">
-          {/* Header */}
-          <motion.div
+      {/* ═══════════════════════════════════════════
+          SECTION CARDS GRID — "Your Menu"
+          ═══════════════════════════════════════════ */}
+      <section className="relative z-2 px-4 md:px-8 py-12 md:py-16">
+        <div className="max-w-5xl mx-auto">
+          {/* Section heading */}
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="mb-12"
+            className="script-heading text-3xl md:text-4xl text-og-cream mb-8 md:mb-10 text-center md:text-left"
           >
-            <p className="font-display font-bold text-clutch-red text-xs uppercase tracking-[0.25em] mb-2">
-              Curriculum
-            </p>
-            <h2 className="font-display font-[800] text-3xl md:text-4xl text-white tracking-tight">
-              Your Sections
-            </h2>
-            <p className="font-body text-clutch-lavender/50 mt-3 max-w-md">
-              Work through each section at your own pace. Earn points and unlock your readiness for
-              the live session.
-            </p>
-          </motion.div>
+            Your Menu
+          </motion.h2>
 
           {/* Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {SECTIONS.map((section, i) => (
               <SectionCard
                 key={section.id}
@@ -491,17 +358,89 @@ export default function DashboardPage() {
       </section>
 
       {/* ═══════════════════════════════════════════
-          ZONE 4 — FOOTER
+          LEADERBOARD PREVIEW
           ═══════════════════════════════════════════ */}
-      <footer className="relative bg-clutch-dark border-t border-white/[0.06]">
-        <div className="px-6 md:px-12 py-12 max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="font-display font-[800] text-white text-lg tracking-tighter">
-              clutch
-            </span>
-            <span className="text-clutch-red text-lg font-bold">.</span>
-            <span className="text-white/20 mx-2">x</span>
-            <span className="font-display font-bold text-white/60 text-sm">Claude Code</span>
+
+      {/* Photo strip above leaderboard */}
+      <div className="relative z-2">
+        <div className="photo-strip">
+          <img
+            src="/images/og-extracted/page7-img5.jpg"
+            alt="Family at the table"
+          />
+        </div>
+      </div>
+
+      <section className="relative z-2 px-4 md:px-8 py-10 md:py-14">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="cream-card p-8 md:p-10 max-w-5xl mx-auto"
+        >
+          <h2 className="script-heading text-2xl md:text-3xl text-og-dark mb-6">
+            Family Standings
+          </h2>
+
+          {/* Top 3 list */}
+          <div className="space-y-4">
+            {MOCK_LEADERBOARD.slice(0, 3).map((entry, i) => (
+              <div
+                key={entry.id}
+                className="flex items-center gap-4 py-3 border-b border-og-brown/10 last:border-b-0"
+              >
+                {/* Rank */}
+                <span className="font-display font-bold text-lg text-og-brown w-8 text-center">
+                  {i + 1}
+                </span>
+
+                {/* Avatar */}
+                <Avatar name={entry.full_name} url={entry.avatar_url} size={40} />
+
+                {/* Name */}
+                <span className="font-display font-bold text-og-dark flex-1">
+                  {entry.full_name}
+                </span>
+
+                {/* Points */}
+                <span className="font-display font-bold text-og-green text-sm">
+                  {entry.total_points} pts
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* View Full Leaderboard link */}
+          <div className="mt-6 text-center">
+            <Link
+              href="/leaderboard"
+              className="font-display font-bold text-sm text-og-teal hover:text-og-teal/80 transition-colors inline-flex items-center gap-1.5"
+            >
+              View Full Leaderboard
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="mt-px">
+                <path
+                  d="M6 3L11 8L6 13"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          FOOTER
+          ═══════════════════════════════════════════ */}
+      <footer className="relative z-2 py-10 px-4 md:px-8">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 text-og-cream/40">
+            <span className="font-display font-bold text-sm">Olive Garden</span>
+            <span className="text-og-cream/20">x</span>
+            <span className="font-display text-sm">Claude Code</span>
           </div>
 
           <div className="flex items-center gap-6">
@@ -509,12 +448,12 @@ export default function DashboardPage() {
               href="https://slack.com/app_redirect?channel=appliedai"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-display text-sm text-clutch-lavender/40 hover:text-clutch-red transition-colors"
+              className="font-display text-sm text-og-cream/40 hover:text-og-green transition-colors"
             >
               #appliedai on Slack
             </a>
-            <span className="text-white/10 font-body text-xs">
-              &copy; {new Date().getFullYear()} Clutch
+            <span className="text-og-cream/20 font-body text-xs">
+              &copy; {new Date().getFullYear()} Olive Garden
             </span>
           </div>
         </div>
