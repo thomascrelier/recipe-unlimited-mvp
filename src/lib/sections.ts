@@ -16,9 +16,9 @@ export const SECTIONS: Section[] = [
     slug: "why-this-matters",
     order: 1,
     points: 100,
-    description: "Clutch's AI vision and why Claude Code matters",
-    heroImage: "hero-building.jpg",
-    accentColor: "#FF464C",
+    description: "Olive Garden's AI vision and why Claude Code matters",
+    heroImage: "og-extracted/page7-img5.jpg",
+    accentColor: "#A8AD00",
   },
   {
     id: "what-is-claude-code",
@@ -27,19 +27,19 @@ export const SECTIONS: Section[] = [
     order: 2,
     points: 100,
     description: "Overview, capabilities, and what sets it apart",
-    heroImage: "hero-3d-logo.jpg",
-    accentColor: "#550E30",
+    heroImage: "og-extracted/page5-img1.jpg",
+    accentColor: "#28939D",
   },
   {
     id: "claude-at-clutch",
-    title: "Claude @ Clutch",
+    title: "Claude @ Olive Garden",
     slug: "claude-at-clutch",
     order: 3,
     points: 150,
     description:
-      "How every role at Clutch — from leaders to engineers — uses Claude",
-    heroImage: "hero-sunglasses.jpg",
-    accentColor: "#FF464C",
+      "How every role at Olive Garden — from leaders to engineers — uses Claude",
+    heroImage: "og-extracted/page6-img1.jpg",
+    accentColor: "#CA7C30",
   },
   {
     id: "the-rules",
@@ -49,8 +49,8 @@ export const SECTIONS: Section[] = [
     points: 150,
     description:
       "Responsible AI: Claude represents you, data safety, and guardrails",
-    heroImage: "hero-billboard.jpg",
-    accentColor: "#550E30",
+    heroImage: "og-extracted/page5-img5.jpg",
+    accentColor: "#A2402A",
   },
   {
     id: "getting-started",
@@ -59,8 +59,8 @@ export const SECTIONS: Section[] = [
     order: 5,
     points: 100,
     description: "Setup, resources, and your first steps with Claude Code",
-    heroImage: "hero-sunset-truck.jpg",
-    accentColor: "#FF464C",
+    heroImage: "og-extracted/page5-img4.jpg",
+    accentColor: "#A8AD00",
   },
   {
     id: "whats-next",
@@ -70,8 +70,8 @@ export const SECTIONS: Section[] = [
     points: 100,
     description:
       "Preview of your facilitated session and how to come prepared",
-    heroImage: "brand-collage.jpg",
-    accentColor: "#550E30",
+    heroImage: "og-extracted/page7-img4.jpg",
+    accentColor: "#28939D",
   },
 ];
 
