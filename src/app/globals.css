@@ -1,23 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
 
 @import "tailwindcss";
 
 /* ──────────────────────────────────────────────
-   CLUTCH DESIGN SYSTEM — Tailwind v4 Theme
-   Editorial / Magazine Aesthetic
+   OLIVE GARDEN DESIGN SYSTEM — Tailwind v4 Theme
+   Tuscan Warmth / Italian Hospitality Aesthetic
    ────────────────────────────────────────────── */
 
 @theme inline {
-  --color-clutch-red: #FF464C;
-  --color-clutch-plum: #550E30;
-  --color-clutch-lavender: #F1EDF8;
-  --color-clutch-cream: #FFF9F5;
-  --color-clutch-dark: #1A0A14;
-  --color-clutch-plum-light: #7A1E4E;
-  --color-clutch-red-muted: #FF6B70;
-  --color-clutch-plum-deep: #3A0820;
-  --font-display: 'Outfit', sans-serif;
-  --font-body: 'Source Serif 4', serif;
+  /* Primary */
+  --color-og-brown: #54301A;
+  --color-og-green: #A8AD00;
+
+  /* Secondary */
+  --color-og-red: #A2402A;
+  --color-og-orange: #CA7C30;
+  --color-og-teal: #28939D;
+
+  /* Tertiary */
+  --color-og-blue: #00407A;
+  --color-og-purple: #532943;
+  --color-og-warm-gray: #D7D2CB;
+
+  /* Extended palette */
+  --color-og-dark: #1C0E05;
+  --color-og-brown-deep: #3D1D0A;
+  --color-og-brown-light: #7A4D2E;
+  --color-og-cream: #FFF8F0;
+  --color-og-green-muted: #C4C84D;
+  --color-og-red-light: #C4604A;
+
+  /* Typography */
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Crimson Pro', serif;
+
+  /* Animations */
   --animate-fade-in-up: fadeInUp 0.6s ease-out both;
   --animate-slide-in-left: slideInLeft 0.5s ease-out both;
   --animate-scale-in: scaleIn 0.4s ease-out both;
@@ -29,11 +46,14 @@
    ────────────────────────────────────────────── */
 
 :root {
-  --clutch-red: #FF464C;
-  --clutch-plum: #550E30;
-  --clutch-lavender: #F1EDF8;
-  --clutch-cream: #FFF9F5;
-  --clutch-dark: #1A0A14;
+  --og-brown: #54301A;
+  --og-green: #A8AD00;
+  --og-red: #A2402A;
+  --og-orange: #CA7C30;
+  --og-teal: #28939D;
+  --og-dark: #1C0E05;
+  --og-cream: #FFF8F0;
+  --og-warm-gray: #D7D2CB;
 }
 
 /* ──────────────────────────────────────────────
@@ -47,29 +67,29 @@ html {
 }
 
 body {
-  background-color: var(--clutch-dark);
-  color: var(--clutch-cream);
+  background-color: var(--og-dark);
+  color: var(--og-cream);
   font-family: var(--font-body);
   line-height: 1.7;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
   overflow-x: hidden;
 }
 
-/* Editorial heading defaults */
+/* Elegant Italian heading defaults */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   line-height: 1.1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   font-weight: 700;
 }
 
 /* ──────────────────────────────────────────────
-   Custom Scrollbar — Thin, Plum-Colored
+   Custom Scrollbar — Thin, Brown-Toned
    ────────────────────────────────────────────── */
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--clutch-plum) transparent;
+  scrollbar-color: var(--og-brown) transparent;
 }
 
 ::-webkit-scrollbar {
@@ -82,17 +102,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--clutch-plum);
+  background: var(--og-brown);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--clutch-red);
+  background: var(--og-green);
 }
 
 /* ──────────────────────────────────────────────
    Grain / Noise Texture Overlay
-   Gives that luxe, printed-paper editorial feel
+   Warm, parchment-like grain for Tuscan feel
    ────────────────────────────────────────────── */
 
 .grain-overlay {
@@ -109,10 +129,11 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
   background-repeat: repeat;
-  background-size: 180px 180px;
+  background-size: 200px 200px;
+  mix-blend-mode: overlay;
 }
 
 /* ──────────────────────────────────────────────
@@ -120,7 +141,7 @@ h1, h2, h3, h4, h5, h6 {
    ────────────────────────────────────────────── */
 
 .text-gradient {
-  background: linear-gradient(135deg, var(--clutch-red) 0%, var(--clutch-plum) 100%);
+  background: linear-gradient(135deg, var(--og-green) 0%, var(--og-teal) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -131,8 +152,8 @@ h1, h2, h3, h4, h5, h6 {
    ────────────────────────────────────────────── */
 
 ::selection {
-  background-color: var(--clutch-red);
-  color: white;
+  background-color: var(--og-green);
+  color: var(--og-dark);
 }
 
 /* ──────────────────────────────────────────────
@@ -140,7 +161,7 @@ h1, h2, h3, h4, h5, h6 {
    ────────────────────────────────────────────── */
 
 :focus-visible {
-  outline: 2px solid var(--clutch-red);
+  outline: 2px solid var(--og-green);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -189,4 +210,149 @@ h1, h2, h3, h4, h5, h6 {
   100% {
     background-position: 200% center;
   }
+}
+
+/* ──────────────────────────────────────────────
+   Wood Table Background
+   ────────────────────────────────────────────── */
+
+.wood-bg {
+  background-image: url('/images/og-extracted/page4-img4.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 768px) {
+  .wood-bg {
+    background-attachment: scroll;
+  }
+}
+
+/* Vignette overlay for depth */
+.wood-vignette::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(28, 14, 5, 0.6) 100%);
+}
+
+/* ──────────────────────────────────────────────
+   Cream Place Card
+   ────────────────────────────────────────────── */
+
+.cream-card {
+  background-color: var(--og-cream);
+  color: var(--og-dark);
+  border-radius: 12px;
+  border: 1px solid rgba(84, 48, 26, 0.15);
+  box-shadow: 0 4px 20px rgba(28, 14, 5, 0.3);
+}
+
+/* ──────────────────────────────────────────────
+   Photo Strip — full-width image divider
+   ────────────────────────────────────────────── */
+
+.photo-strip {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.photo-strip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.photo-strip::before,
+.photo-strip::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.photo-strip::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(28, 14, 5, 0.8), transparent);
+}
+
+.photo-strip::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(28, 14, 5, 0.8), transparent);
+}
+
+/* ──────────────────────────────────────────────
+   Olive Branch Divider
+   ────────────────────────────────────────────── */
+
+.olive-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.olive-divider::before,
+.olive-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(84, 48, 26, 0.3), transparent);
+}
+
+/* ──────────────────────────────────────────────
+   Script Heading — italic display for OG feel
+   ────────────────────────────────────────────── */
+
+.script-heading {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* ──────────────────────────────────────────────
+   Quote Block — wood background with script text
+   ────────────────────────────────────────────── */
+
+.wood-quote {
+  position: relative;
+  background-image: url('/images/og-extracted/page4-img4.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 3rem 2rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.wood-quote::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(28, 14, 5, 0.5);
+}
+
+.wood-quote p {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  color: var(--og-cream);
+  font-size: 1.5rem;
+  line-height: 1.4;
 }
