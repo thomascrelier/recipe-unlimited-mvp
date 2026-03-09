@@ -14,21 +14,21 @@ const handleLogin = async () => {
   });
 };
 
-// Stagger orchestration
+// ─── Animation variants ──────────────────────────────
+const easeOutExpo: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 const container = {
   hidden: {},
   show: {
     transition: {
-      staggerChildren: 0.18,
-      delayChildren: 0.1,
+      staggerChildren: 0.15,
+      delayChildren: 0.3,
     },
   },
 };
 
-const easeOutExpo: [number, number, number, number] = [0.22, 1, 0.36, 1];
-
 const fadeInUp = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 24 },
   show: {
     opacity: 1,
     y: 0,
@@ -37,7 +37,7 @@ const fadeInUp = {
 };
 
 const scaleIn = {
-  hidden: { opacity: 0, scale: 0.88 },
+  hidden: { opacity: 0, scale: 0.92 },
   show: {
     opacity: 1,
     scale: 1,
@@ -46,186 +46,208 @@ const scaleIn = {
 };
 
 const heroFade = {
-  hidden: { opacity: 0, scale: 1.06 },
+  hidden: { opacity: 0, scale: 1.04 },
   show: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 1.4, ease: easeOutExpo },
+    transition: { duration: 1.2, ease: easeOutExpo },
   },
 };
 
-const floatLoop = {
-  y: [-6, 6, -6],
-  rotate: [-1.5, 1.5, -1.5],
-  transition: {
-    duration: 6,
-    ease: "easeInOut" as const,
-    repeat: Infinity,
-  },
-};
+// ─── Olive leaf SVG for divider ──────────────────────
+function OliveLeaf() {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="text-og-brown/40"
+    >
+      <path
+        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c1.5-3 2-6.5 2-10S13.5 2 12 2z"
+        fill="currentColor"
+        opacity="0.5"
+      />
+      <path
+        d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10c-1.5-3-2-6.5-2-10S10.5 2 12 2z"
+        fill="currentColor"
+        opacity="0.3"
+      />
+      <path
+        d="M12 5v14"
+        stroke="currentColor"
+        strokeWidth="1"
+        opacity="0.4"
+      />
+    </svg>
+  );
+}
 
 export default function LoginPage() {
   return (
-    <div className="relative flex min-h-screen flex-col lg:flex-row overflow-hidden">
-      {/* ───────── LEFT: Hero Image Panel (60%) ───────── */}
+    <div className="relative z-2 flex min-h-screen items-center justify-center overflow-hidden px-4 py-12">
+      {/* ─── Ambient side images (desktop only) ─── */}
+      <div className="pointer-events-none hidden lg:block">
+        {/* Left: breadsticks */}
+        <div className="fixed left-0 top-1/2 -translate-y-1/2 w-[340px] h-[500px] opacity-[0.15] blur-[2px]">
+          <Image
+            src="/images/og-extracted/page5-img5.jpg"
+            alt=""
+            fill
+            className="object-cover rounded-r-3xl"
+            sizes="340px"
+          />
+        </div>
+        {/* Right: family dining */}
+        <div className="fixed right-0 top-1/2 -translate-y-1/2 w-[340px] h-[500px] opacity-[0.15] blur-[2px]">
+          <Image
+            src="/images/og-extracted/page7-img5.jpg"
+            alt=""
+            fill
+            className="object-cover rounded-l-3xl"
+            sizes="340px"
+          />
+        </div>
+      </div>
+
+      {/* ─── Centered content column ─── */}
       <motion.div
-        className="relative w-full lg:w-[60%] min-h-[45vh] lg:min-h-screen"
-        variants={heroFade}
+        className="relative z-10 flex w-full max-w-lg flex-col items-center"
+        variants={container}
         initial="hidden"
         animate="show"
       >
-        {/* Full-bleed hero image */}
-        <Image
-          src="/images/hero-sunset-truck.jpg"
-          alt="Clutch — sunset truck hero"
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="(max-width: 1024px) 100vw, 60vw"
-        />
-
-        {/* Dark cinematic overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-clutch-dark/60 via-clutch-dark/30 to-clutch-dark/80 lg:bg-gradient-to-r lg:from-clutch-dark/50 lg:via-clutch-dark/20 lg:to-clutch-dark/90" />
-
-        {/* Floating 3D "C" logo */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center"
-          animate={floatLoop}
-        >
-          <div className="relative w-28 h-28 sm:w-36 sm:h-36 lg:w-48 lg:h-48 drop-shadow-[0_20px_60px_rgba(255,70,76,0.35)]">
-            <Image
-              src="/images/logo-3d-c.png"
-              alt="Clutch logo"
-              fill
-              className="object-contain"
-              sizes="200px"
-            />
-          </div>
-        </motion.div>
-
-        {/* Bottom-left brand whisper (desktop) */}
-        <div className="hidden lg:block absolute bottom-8 left-8">
-          <p className="font-[family-name:var(--font-body)] text-sm text-white/40 tracking-widest uppercase">
-            Clutch Training Portal
-          </p>
-        </div>
-      </motion.div>
-
-      {/* ───────── RIGHT: Login Content (40%) ───────── */}
-      <div className="relative flex w-full lg:w-[40%] min-h-[55vh] lg:min-h-screen items-center justify-center bg-clutch-dark px-6 py-16 sm:px-12 lg:px-16">
-        {/* Subtle radial accent behind content */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-1/3 -right-1/4 w-[600px] h-[600px] rounded-full bg-clutch-plum/20 blur-[120px]" />
-          <div className="absolute -bottom-1/4 -left-1/4 w-[400px] h-[400px] rounded-full bg-clutch-red/8 blur-[100px]" />
-        </div>
-
-        <motion.div
-          className="relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left max-w-md w-full"
-          variants={container}
-          initial="hidden"
-          animate="show"
-        >
-          {/* Kicker label */}
-          <motion.div variants={fadeInUp}>
-            <span className="inline-block mb-5 px-4 py-1.5 rounded-full border border-clutch-plum/40 bg-clutch-plum/10 text-clutch-red text-xs font-[family-name:var(--font-display)] font-semibold tracking-[0.15em] uppercase">
-              Employee Training
-            </span>
-          </motion.div>
-
-          {/* Main headline */}
-          <motion.h1
-            className="font-[family-name:var(--font-display)] text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.05] tracking-[-0.03em]"
-            variants={fadeInUp}
-          >
-            Master{" "}
-            <span className="text-gradient">
-              Claude Code
-            </span>
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            className="mt-5 font-[family-name:var(--font-body)] text-lg sm:text-xl text-clutch-lavender/80 leading-relaxed max-w-sm"
-            variants={fadeInUp}
-          >
-            Pre-work for your facilitated training session
-          </motion.p>
-
-          {/* Divider accent */}
-          <motion.div
-            className="mt-8 mb-8 w-12 h-[2px] rounded-full bg-gradient-to-r from-clutch-red to-clutch-plum"
-            variants={scaleIn}
+        {/* ─── Hero: OG Logo with tagline ─── */}
+        <motion.div className="mb-8 w-full max-w-[500px]" variants={heroFade}>
+          <Image
+            src="/images/og-extracted/page1-img1.jpg"
+            alt="Olive Garden — We're all family here"
+            width={1200}
+            height={675}
+            priority
+            className="w-full h-auto rounded-xl shadow-2xl"
+            sizes="(max-width: 640px) 90vw, 500px"
           />
-
-          {/* Google Sign-In Button */}
-          <motion.button
-            onClick={handleLogin}
-            variants={scaleIn}
-            whileHover={{
-              scale: 1.04,
-              boxShadow: "0 0 32px rgba(255, 70, 76, 0.4)",
-            }}
-            whileTap={{ scale: 0.97 }}
-            className="group relative w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-clutch-red text-white font-[family-name:var(--font-display)] font-semibold text-base tracking-wide shadow-lg shadow-clutch-red/20 transition-colors duration-300 hover:bg-clutch-red/90 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clutch-red focus-visible:ring-offset-2 focus-visible:ring-offset-clutch-dark"
-          >
-            {/* Google "G" icon */}
-            <svg
-              className="w-5 h-5 flex-shrink-0"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-                fill="#fff"
-              />
-              <path
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                fill="#fff"
-                opacity="0.85"
-              />
-              <path
-                d="M5.84 14.1a6.9 6.9 0 0 1 0-4.24V7.02H2.18A11.96 11.96 0 0 0 0 12c0 1.94.46 3.77 1.28 5.4l3.56-2.77.01-.53z"
-                fill="#fff"
-                opacity="0.7"
-              />
-              <path
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 1.99 14.97.96 12 .96 7.7.96 3.99 3.47 2.18 7.02l3.66 2.84c.87-2.6 3.3-4.48 6.16-4.48z"
-                fill="#fff"
-                opacity="0.55"
-              />
-            </svg>
-            Sign in with Google
-            {/* Shimmer sweep */}
-            <span className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-              <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-            </span>
-          </motion.button>
-
-          {/* Dev bypass */}
-          <motion.a
-            href="/dashboard"
-            className="mt-4 w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3 rounded-2xl border border-white/10 text-white/60 font-[family-name:var(--font-display)] font-medium text-sm tracking-wide transition-all duration-300 hover:border-clutch-red/40 hover:text-white/90 hover:bg-white/5"
-            variants={fadeInUp}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            Continue as Guest
-          </motion.a>
-
-          {/* Restricted access note */}
-          <motion.p
-            className="mt-6 text-sm text-white/30 font-[family-name:var(--font-body)]"
-            variants={fadeInUp}
-          >
-            Restricted to{" "}
-            <span className="text-clutch-lavender/50 font-medium">
-              @clutch.ca
-            </span>{" "}
-            accounts
-          </motion.p>
         </motion.div>
-      </div>
+
+        {/* ─── Sign-in card ─── */}
+        <motion.div
+          className="cream-card w-full max-w-md p-8 sm:p-10"
+          variants={scaleIn}
+        >
+          <motion.div
+            className="flex flex-col items-center text-center"
+            variants={container}
+            initial="hidden"
+            animate="show"
+          >
+            {/* Script heading */}
+            <motion.h1
+              className="script-heading text-3xl sm:text-4xl text-og-dark"
+              variants={fadeInUp}
+            >
+              Welcome to the Table
+            </motion.h1>
+
+            {/* Subtext */}
+            <motion.p
+              className="mt-2 font-body text-base text-og-dark/60"
+              variants={fadeInUp}
+            >
+              Your AI training journey starts here
+            </motion.p>
+
+            {/* Olive branch divider */}
+            <motion.div
+              className="olive-divider my-6 w-full"
+              variants={fadeInUp}
+            >
+              <OliveLeaf />
+            </motion.div>
+
+            {/* Google Sign-In button */}
+            <motion.button
+              onClick={handleLogin}
+              variants={scaleIn}
+              whileHover={{
+                scale: 1.03,
+                boxShadow: "0 8px 32px rgba(84, 48, 26, 0.3)",
+              }}
+              whileTap={{ scale: 0.97 }}
+              className="flex w-full items-center justify-center gap-3 rounded-xl bg-og-brown px-6 py-4 font-display font-bold text-og-cream shadow-lg transition-colors duration-300 hover:bg-og-brown-deep cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-og-brown focus-visible:ring-offset-2 focus-visible:ring-offset-og-cream"
+            >
+              {/* Google "G" icon */}
+              <svg
+                className="h-5 w-5 flex-shrink-0"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
+                  fill="#FFF8F0"
+                />
+                <path
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  fill="#FFF8F0"
+                  opacity="0.85"
+                />
+                <path
+                  d="M5.84 14.1a6.9 6.9 0 0 1 0-4.24V7.02H2.18A11.96 11.96 0 0 0 0 12c0 1.94.46 3.77 1.28 5.4l3.56-2.77.01-.53z"
+                  fill="#FFF8F0"
+                  opacity="0.7"
+                />
+                <path
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 1.99 14.97.96 12 .96 7.7.96 3.99 3.47 2.18 7.02l3.66 2.84c.87-2.6 3.3-4.48 6.16-4.48z"
+                  fill="#FFF8F0"
+                  opacity="0.55"
+                />
+              </svg>
+              Sign in with Google
+            </motion.button>
+
+            {/* Continue as Guest */}
+            <motion.a
+              href="/dashboard"
+              className="mt-4 text-sm text-og-dark/40 transition-colors duration-300 hover:text-og-dark/70 font-body"
+              variants={fadeInUp}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Continue as Guest
+            </motion.a>
+
+            {/* Restricted access note */}
+            <motion.p
+              className="mt-5 text-xs text-og-dark/30 font-body"
+              variants={fadeInUp}
+            >
+              Restricted to{" "}
+              <span className="font-medium text-og-dark/40">
+                @olivegarden.com
+              </span>{" "}
+              accounts
+            </motion.p>
+          </motion.div>
+        </motion.div>
+
+        {/* ─── Bottom watermark: script quote ─── */}
+        <motion.div
+          className="mt-10 w-full max-w-[400px] opacity-[0.12]"
+          variants={fadeInUp}
+        >
+          <Image
+            src="/images/og-extracted/page3-img2.jpg"
+            alt=""
+            width={800}
+            height={400}
+            className="w-full h-auto"
+            sizes="400px"
+          />
+        </motion.div>
+      </motion.div>
     </div>
   );
 }
