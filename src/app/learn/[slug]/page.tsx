@@ -2,8 +2,9 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { SECTIONS } from "@/lib/sections";
 
 /* ──────────────────────────────────────────────
@@ -30,7 +31,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
       {
         type: "text",
         content:
-          "At Clutch, we're not just adopting AI — we're building with it. Claude Code represents a fundamental shift in how we work: faster iteration, deeper insight, and a new kind of creative partnership between humans and machines.",
+          "At Olive Garden, we're not just adopting AI — we're building with it. Claude Code represents a fundamental shift in how we work: faster iteration, deeper insight, and a new kind of creative partnership between humans and machines.",
       },
       {
         type: "quote",
@@ -102,7 +103,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
         items: [
           "6 sections of pre-work",
           "A facilitated hands-on session",
-          "Real Clutch use cases to practice with",
+          "Real Olive Garden use cases to practice with",
         ],
       },
     ],
@@ -143,7 +144,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
       {
         type: "text",
         content:
-          "Before we go further, let's demystify some of the technology behind the tools we use at Clutch. You don't need to be an engineer to understand this — and understanding it will make you far more effective with Claude Code.",
+          "Before we go further, let's demystify some of the technology behind the tools we use at Olive Garden. You don't need to be an engineer to understand this — and understanding it will make you far more effective with Claude Code.",
       },
       {
         type: "glossary",
@@ -151,7 +152,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
         terms: [
           {
             term: "Front-End",
-            definition: "Everything the user sees and interacts with — buttons, pages, forms, animations. It's the visual layer. When you visit clutch.ca and click around, that's the front-end. Built with HTML, CSS, and JavaScript (often using frameworks like React or Next.js).",
+            definition: "Everything the user sees and interacts with — buttons, pages, forms, animations. It's the visual layer. When you visit olivegarden.com and click around, that's the front-end. Built with HTML, CSS, and JavaScript (often using frameworks like React or Next.js).",
           },
           {
             term: "Back-End",
@@ -163,7 +164,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
           },
           {
             term: "Database",
-            definition: "Where all the app's data lives — user accounts, progress, scores, content. It's like a giant organized spreadsheet that the back-end reads from and writes to. At Clutch, we use Supabase, which is a database with superpowers (auth, real-time updates, and more).",
+            definition: "Where all the app's data lives — user accounts, progress, scores, content. It's like a giant organized spreadsheet that the back-end reads from and writes to. At Olive Garden, we use Supabase, which is a database with superpowers (auth, real-time updates, and more).",
           },
           {
             term: "API (Application Programming Interface)",
@@ -171,17 +172,17 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
           },
           {
             term: "Deployment",
-            definition: "The process of making your app live on the internet so others can use it. You write code locally, then \"deploy\" it to a server. At Clutch, we deploy to Vercel — it takes our code and makes it available at a URL anyone can visit.",
+            definition: "The process of making your app live on the internet so others can use it. You write code locally, then \"deploy\" it to a server. At Olive Garden, we deploy to Vercel — it takes our code and makes it available at a URL anyone can visit.",
           },
         ],
       },
       {
         type: "glossary",
-        title: "The Clutch Toolkit",
+        title: "The Olive Garden Toolkit",
         terms: [
           {
             term: "GitHub",
-            definition: "Where all of Clutch's code lives. Think of it as Google Drive, but for code. Every change is tracked, so you can see who changed what and when. Teams collaborate here by creating \"branches\" (copies) and \"pull requests\" (proposals to merge changes). Claude Code connects directly to GitHub.",
+            definition: "Where all of Olive Garden's code lives. Think of it as Google Drive, but for code. Every change is tracked, so you can see who changed what and when. Teams collaborate here by creating \"branches\" (copies) and \"pull requests\" (proposals to merge changes). Claude Code connects directly to GitHub.",
           },
           {
             term: "Vercel",
@@ -201,7 +202,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
           },
           {
             term: "Tailwind CSS",
-            definition: "A tool for styling web pages. Instead of writing custom design code from scratch, you use pre-built utility classes. It's how this portal gets its Clutch brand colors, spacing, and typography without writing thousands of lines of CSS.",
+            definition: "A tool for styling web pages. Instead of writing custom design code from scratch, you use pre-built utility classes. It's how this portal gets its Olive Garden brand colors, spacing, and typography without writing thousands of lines of CSS.",
           },
         ],
       },
@@ -217,7 +218,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
       {
         type: "text",
         content:
-          "Claude Code isn't just for engineers. At Clutch, we see opportunity across every role — from leadership to production to customer-facing teams. The key is learning to think in terms of delegation: what tasks can you hand off to a brilliant, tireless assistant?",
+          "Claude Code isn't just for engineers. At Olive Garden, we see opportunity across every role — from leadership to production to customer-facing teams. The key is learning to think in terms of delegation: what tasks can you hand off to a brilliant, tireless assistant?",
       },
       {
         type: "callout",
@@ -274,7 +275,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
       {
         type: "text",
         content:
-          "With great power comes great responsibility. Claude Code is incredibly capable, but using it responsibly is non-negotiable at Clutch. These rules aren't restrictions — they're the foundation of trust that lets us move fast.",
+          "With great power comes great responsibility. Claude Code is incredibly capable, but using it responsibly is non-negotiable at Olive Garden. These rules aren't restrictions — they're the foundation of trust that lets us move fast.",
       },
       {
         type: "quote",
@@ -307,7 +308,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
           "Don't share API keys, passwords, or credentials",
           "Don't paste proprietary business logic into external AI tools",
           "Claude Code (CLI) keeps data local — prefer it over web-based AI",
-          "Follow Clutch's security policies at all times",
+          "Follow Olive Garden's security policies at all times",
         ],
       },
       {
@@ -333,7 +334,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
         title: "Setup Steps",
         items: [
           "1. Install Claude Code CLI from Anthropic",
-          "2. Authenticate with your Clutch credentials",
+          "2. Authenticate with your Olive Garden credentials",
           "3. Open a project in your terminal",
           "4. Run: claude and start a conversation",
         ],
@@ -367,7 +368,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
       {
         type: "text",
         content:
-          "You've done the pre-work. You understand what Claude Code is, how Clutch plans to use it, and the rules of engagement. Now it's time for the real thing.",
+          "You've done the pre-work. You understand what Claude Code is, how Olive Garden plans to use it, and the rules of engagement. Now it's time for the real thing.",
       },
       {
         type: "quote",
@@ -379,7 +380,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
         title: "What to expect in the session",
         items: [
           "Hands-on exercises with Claude Code",
-          "Real Clutch use cases tailored to your role",
+          "Real Olive Garden use cases tailored to your role",
           "Live coding and problem-solving",
           "Q&A with your facilitator",
           "Tips and advanced techniques",
@@ -398,7 +399,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
       {
         type: "text",
         content:
-          "See you there. Let's build the future of Clutch together.",
+          "See you there. Let's build the future of Olive Garden together.",
       },
     ],
   },
@@ -409,7 +410,7 @@ const SECTION_CONTENT: Record<string, SectionContent> = {
    ────────────────────────────────────────────── */
 
 function ConfettiParticle({ index }: { index: number }) {
-  const colors = ["#FF464C", "#550E30", "#F1EDF8", "#FFF9F5", "#FF6B70"];
+  const colors = ["#A8AD00", "#CA7C30", "#54301A", "#C4C84D", "#CA7C30"];
   const color = colors[index % colors.length];
   const angle = (index / 12) * 360;
   const distance = 60 + Math.random() * 80;
@@ -446,18 +447,15 @@ function ConfettiParticle({ index }: { index: number }) {
    ────────────────────────────────────────────── */
 
 function TextBlock({ content, index }: { content: string; index: number }) {
-  const isEven = index % 2 === 0;
   return (
     <motion.div
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6, delay: 0.1 }}
-      className={`${
-        isEven ? "bg-clutch-cream text-clutch-dark" : "bg-clutch-dark text-clutch-cream"
-      } rounded-2xl px-8 py-10 md:px-12 md:py-14`}
+      className="cream-card p-6 md:p-8"
     >
-      <p className="font-[family-name:var(--font-body)] text-lg leading-relaxed md:text-xl md:leading-relaxed">
+      <p className="font-body text-og-dark leading-[1.8] text-base md:text-lg">
         {content}
       </p>
     </motion.div>
@@ -466,23 +464,19 @@ function TextBlock({ content, index }: { content: string; index: number }) {
 
 function QuoteBlock({ content }: { content: string }) {
   return (
-    <motion.blockquote
-      initial={{ opacity: 0, x: -40 }}
-      whileInView={{ opacity: 1, x: 0 }}
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.7, ease: "easeOut" as const }}
-      className="relative my-4 border-l-4 border-clutch-red pl-8 md:pl-12"
+      className="wood-quote rounded-xl -mx-4 md:-mx-12"
     >
-      <div
-        className="absolute -left-3 -top-4 font-[family-name:var(--font-display)] text-6xl leading-none text-clutch-red opacity-20 select-none"
-        aria-hidden="true"
-      >
-        &ldquo;
-      </div>
-      <p className="font-[family-name:var(--font-display)] text-2xl font-medium italic leading-snug text-clutch-cream md:text-3xl md:leading-snug">
+      <p className="relative z-1">
+        <span className="text-og-warm-gray/40 mr-2" aria-hidden="true">&mdash;&ensp;</span>
         {content}
+        <span className="text-og-warm-gray/40 ml-2" aria-hidden="true">&ensp;&mdash;</span>
       </p>
-    </motion.blockquote>
+    </motion.div>
   );
 }
 
@@ -493,13 +487,13 @@ function CalloutBlock({ title, items }: { title: string; items: string[] }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5 }}
-      className="overflow-hidden rounded-2xl border border-clutch-plum/30 bg-gradient-to-br from-clutch-plum/10 to-clutch-dark"
+      className="cream-card overflow-hidden border-l-4 border-og-orange"
     >
-      <div className="border-b border-clutch-plum/20 bg-clutch-plum/15 px-8 py-5">
+      <div className="p-5">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-clutch-red/20">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-og-orange/15">
             <svg
-              className="h-4 w-4 text-clutch-red"
+              className="h-4 w-4 text-og-orange"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -512,12 +506,12 @@ function CalloutBlock({ title, items }: { title: string; items: string[] }) {
               />
             </svg>
           </div>
-          <h3 className="font-[family-name:var(--font-display)] text-lg font-bold tracking-tight text-clutch-cream">
+          <h3 className="font-display font-bold text-og-dark text-lg">
             {title}
           </h3>
         </div>
       </div>
-      <ul className="space-y-3 px-8 py-6">
+      <ul className="space-y-3 px-6 pb-6">
         {items.map((item, i) => (
           <motion.li
             key={i}
@@ -525,10 +519,10 @@ function CalloutBlock({ title, items }: { title: string; items: string[] }) {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.3, delay: i * 0.08 }}
-            className="flex items-start gap-3 text-clutch-cream/85"
+            className="flex items-start gap-3 text-og-dark/80"
           >
-            <span className="mt-1.5 block h-2 w-2 flex-shrink-0 rounded-full bg-clutch-red" />
-            <span className="font-[family-name:var(--font-body)] text-base leading-relaxed md:text-lg">
+            <span className="mt-1.5 block h-2 w-2 flex-shrink-0 rounded-full bg-og-green" />
+            <span className="font-body text-base leading-relaxed md:text-lg">
               {item}
             </span>
           </motion.li>
@@ -545,11 +539,11 @@ function VideoBlock({ title, url }: { title: string; url: string }) {
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6 }}
-      className="overflow-hidden rounded-2xl shadow-2xl shadow-clutch-plum/20"
+      className="cream-card overflow-hidden"
     >
-      <div className="bg-clutch-plum/30 px-6 py-4">
+      <div className="border-b border-og-brown/15 px-6 py-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-clutch-red">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-og-green">
             <svg
               className="h-4 w-4 text-white"
               fill="currentColor"
@@ -558,12 +552,12 @@ function VideoBlock({ title, url }: { title: string; url: string }) {
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>
-          <span className="font-[family-name:var(--font-display)] text-sm font-bold uppercase tracking-widest text-clutch-cream/70">
+          <span className="font-display font-bold text-og-dark text-sm uppercase tracking-widest">
             {title}
           </span>
         </div>
       </div>
-      <div className="relative aspect-video w-full bg-clutch-dark">
+      <div className="relative aspect-video w-full bg-og-dark">
         <iframe
           src={url}
           title={title}
@@ -594,12 +588,20 @@ function LinkBlock({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5 }}
-      whileHover={{ scale: 1.02, y: -2 }}
-      className="group flex items-center gap-6 rounded-2xl border border-clutch-plum/30 bg-clutch-plum/10 px-8 py-6 transition-colors hover:border-clutch-red/40 hover:bg-clutch-plum/20"
+      whileHover={{ y: -2 }}
+      className="group block cream-card p-6 border-l-4 border-og-green"
     >
-      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-clutch-red/15 transition-colors group-hover:bg-clutch-red/25">
+      <div className="flex items-center gap-4">
+        <div className="min-w-0 flex-1">
+          <h4 className="font-display font-bold text-og-teal group-hover:text-og-green transition-colors text-lg">
+            {title}
+          </h4>
+          <p className="mt-1 font-body text-og-dark/60 text-sm">
+            {description}
+          </p>
+        </div>
         <svg
-          className="h-5 w-5 text-clutch-red"
+          className="h-5 w-5 flex-shrink-0 text-og-dark/30 transition-all group-hover:translate-x-1 group-hover:text-og-green"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -612,27 +614,6 @@ function LinkBlock({
           />
         </svg>
       </div>
-      <div className="min-w-0 flex-1">
-        <h4 className="font-[family-name:var(--font-display)] text-lg font-bold text-clutch-cream group-hover:text-clutch-red transition-colors">
-          {title}
-        </h4>
-        <p className="mt-1 font-[family-name:var(--font-body)] text-sm text-clutch-cream/60">
-          {description}
-        </p>
-      </div>
-      <svg
-        className="h-5 w-5 flex-shrink-0 text-clutch-cream/30 transition-all group-hover:translate-x-1 group-hover:text-clutch-red"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M17 8l4 4m0 0l-4 4m4-4H3"
-        />
-      </svg>
     </motion.a>
   );
 }
@@ -654,16 +635,16 @@ function GlossaryBlock({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6 }}
-      className="rounded-3xl border border-clutch-plum/30 bg-gradient-to-br from-clutch-plum/15 via-clutch-dark to-clutch-plum/10 p-8 sm:p-10"
+      className="cream-card p-6 md:p-8"
     >
       {/* Header */}
-      <div className="flex items-center gap-3 mb-8">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-clutch-red/15">
-          <svg className="h-5 w-5 text-clutch-red" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-og-brown/10">
+          <svg className="h-5 w-5 text-og-brown" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
           </svg>
         </div>
-        <h3 className="font-[family-name:var(--font-display)] text-2xl font-bold text-clutch-cream">
+        <h3 className="font-display font-bold text-og-dark text-2xl">
           {title}
         </h3>
       </div>
@@ -677,12 +658,12 @@ function GlossaryBlock({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: i * 0.05 }}
-            className="group rounded-2xl border border-clutch-plum/20 bg-clutch-dark/60 p-5 transition-all hover:border-clutch-red/30 hover:bg-clutch-plum/10"
+            className="rounded-lg bg-og-warm-gray/20 p-4"
           >
-            <dt className="font-[family-name:var(--font-display)] text-base font-bold text-clutch-red mb-2">
+            <dt className="font-display font-bold text-og-brown text-base mb-2">
               {item.term}
             </dt>
-            <dd className="font-[family-name:var(--font-body)] text-sm leading-relaxed text-clutch-cream/70">
+            <dd className="font-body text-og-dark/70 text-sm leading-relaxed">
               {item.definition}
             </dd>
           </motion.div>
@@ -725,6 +706,36 @@ function ContentBlock({ block, index }: { block: Block; index: number }) {
    Main Page Component
    ────────────────────────────────────────────── */
 
+/* ──────────────────────────────────────────────
+   Photo Strip Images (cycle through)
+   ────────────────────────────────────────────── */
+
+const PHOTO_STRIP_IMAGES = [
+  "/images/og-extracted/page5-img1.jpg",
+  "/images/og-extracted/page5-img4.jpg",
+  "/images/og-extracted/page5-img5.jpg",
+];
+
+/* ──────────────────────────────────────────────
+   Scroll Progress Bar
+   ────────────────────────────────────────────── */
+
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
+  return (
+    <motion.div
+      style={{ scaleX, transformOrigin: "0%" }}
+      className="fixed top-0 left-0 right-0 h-[3px] z-[9999] bg-og-green"
+    />
+  );
+}
+
+/* ──────────────────────────────────────────────
+   Main Page Component
+   ────────────────────────────────────────────── */
+
 export default function LearnSectionPage() {
   const params = useParams();
   const slug = params.slug as string;
@@ -758,173 +769,172 @@ export default function LearnSectionPage() {
   /* ── 404 state ── */
   if (!section || !content) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-clutch-dark px-6">
-        <h1 className="font-[family-name:var(--font-display)] text-5xl font-black text-clutch-cream">
-          Section Not Found
-        </h1>
-        <p className="mt-4 font-[family-name:var(--font-body)] text-lg text-clutch-cream/60">
-          The section you&apos;re looking for doesn&apos;t exist.
-        </p>
-        <Link
-          href="/"
-          className="mt-8 rounded-full bg-clutch-red px-8 py-3 font-[family-name:var(--font-display)] text-sm font-bold uppercase tracking-widest text-white transition-transform hover:scale-105"
-        >
-          Back to Dashboard
-        </Link>
+      <div className="relative z-2 min-h-screen flex flex-col items-center justify-center px-6">
+        <div className="cream-card p-8 text-center max-w-md">
+          <h1 className="font-display text-3xl font-bold text-og-dark mb-3">
+            Section Not Found
+          </h1>
+          <p className="font-body text-og-dark/60 mb-6">
+            The section you&apos;re looking for doesn&apos;t exist.
+          </p>
+          <Link
+            href="/dashboard"
+            className="inline-block bg-og-green text-og-dark font-display font-bold rounded-xl px-6 py-3 text-sm transition-transform hover:scale-105"
+          >
+            Back to Dashboard
+          </Link>
+        </div>
       </div>
     );
   }
 
-  const orderLabel = String(section.order).padStart(2, "0");
-
   return (
-    <main className="min-h-screen bg-clutch-dark">
-      {/* ─── Hero Header ─── */}
-      <section className="relative flex min-h-[70vh] items-end overflow-hidden">
-        {/* Background image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(/images/${section.heroImage})`,
-          }}
-        />
+    <div className="relative z-2 min-h-screen">
+      {/* ═══════════════════════════════════════════
+          SCROLL PROGRESS BAR
+          ═══════════════════════════════════════════ */}
+      <ScrollProgress />
 
-        {/* Dark gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-clutch-dark via-clutch-dark/80 to-clutch-dark/30" />
+      {/* ═══════════════════════════════════════════
+          NAV BAR (same as dashboard)
+          ═══════════════════════════════════════════ */}
+      <nav className="sticky top-0 z-50 bg-og-brown/95 backdrop-blur-sm border-b border-og-brown-light/30 border-b-2 border-b-og-green/40">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 py-3">
+          {/* Left: Logo */}
+          <Link href="/dashboard" className="flex-shrink-0">
+            <Image
+              src="/images/og-extracted/page1-img2.jpg"
+              alt="Olive Garden"
+              width={80}
+              height={40}
+              className="rounded-md h-10 w-auto object-contain"
+            />
+          </Link>
 
-        {/* Watermark section number */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 0.06, scale: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" as const }}
-          className="pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 select-none font-[family-name:var(--font-display)] text-[20rem] font-black leading-none text-white md:right-16 md:text-[28rem]"
-          aria-hidden="true"
-        >
-          {orderLabel}
-        </motion.div>
-
-        {/* Hero content */}
-        <div className="relative z-10 w-full px-6 pb-16 pt-32 md:px-16 lg:px-24">
-          {/* Breadcrumb */}
-          <motion.nav
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mb-8"
-            aria-label="Breadcrumb"
-          >
-            <ol className="flex items-center gap-2 font-[family-name:var(--font-display)] text-sm tracking-wide text-clutch-cream/50">
-              <li>
-                <Link
-                  href="/"
-                  className="transition-colors hover:text-clutch-red"
-                >
-                  Dashboard
-                </Link>
-              </li>
-              <li aria-hidden="true">
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </li>
-              <li className="text-clutch-cream/80">{section.title}</li>
-            </ol>
-          </motion.nav>
-
-          {/* Section number tag */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mb-4 inline-flex items-center gap-2 rounded-full bg-clutch-red/15 px-4 py-1.5 backdrop-blur-sm"
-          >
-            <span className="font-[family-name:var(--font-display)] text-xs font-bold uppercase tracking-widest text-clutch-red">
-              Section {orderLabel}
-            </span>
-            <span className="font-[family-name:var(--font-display)] text-xs text-clutch-cream/40">
-              /{" "}
-              {String(SECTIONS.length).padStart(2, "0")}
-            </span>
-          </motion.div>
-
-          {/* Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
-            className="max-w-3xl font-[family-name:var(--font-display)] text-5xl font-black leading-[1.05] tracking-tight text-white md:text-7xl lg:text-8xl"
-          >
-            {section.title}
-          </motion.h1>
-
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-6 max-w-xl font-[family-name:var(--font-body)] text-lg leading-relaxed text-clutch-cream/60 md:text-xl"
-          >
-            {section.description}
-          </motion.p>
-
-          {/* Points badge */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: 0.8 }}
-            className="mt-6 inline-flex items-center gap-2 rounded-full border border-clutch-cream/10 bg-clutch-cream/5 px-4 py-2 backdrop-blur-sm"
-          >
-            <svg
-              className="h-4 w-4 text-clutch-red"
-              fill="currentColor"
-              viewBox="0 0 24 24"
+          {/* Center: Nav links */}
+          <div className="flex items-center gap-6">
+            <Link
+              href="/dashboard"
+              className="font-display text-sm text-og-warm-gray/60 hover:text-og-cream transition-colors"
             >
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-            </svg>
-            <span className="font-[family-name:var(--font-display)] text-sm font-bold text-clutch-cream/80">
-              {section.points} pts
-            </span>
-          </motion.div>
+              Dashboard
+            </Link>
+            <Link
+              href="/leaderboard"
+              className="font-display text-sm text-og-warm-gray/60 hover:text-og-cream transition-colors"
+            >
+              Leaderboard
+            </Link>
+          </div>
+
+          {/* Right: Back to dashboard */}
+          <Link
+            href="/dashboard"
+            className="font-display text-xs font-bold text-og-cream/70 hover:text-og-cream bg-og-brown-light/20 hover:bg-og-brown-light/30 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            Back to Dashboard
+          </Link>
+        </div>
+      </nav>
+
+      {/* ═══════════════════════════════════════════
+          LESSON HEADER — Cream Banner Card
+          ═══════════════════════════════════════════ */}
+      <section className="relative z-2 px-4 md:px-8 pt-8 md:pt-12">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="cream-card max-w-[780px] mx-auto overflow-hidden"
+        >
+          {/* Hero photo banner */}
+          <div className="relative h-56 w-full">
+            <Image
+              src={`/images/${section.heroImage}`}
+              alt={section.title}
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+
+          {/* Content area */}
+          <div className="p-8">
+            <h1 className="script-heading text-og-dark text-3xl md:text-4xl">
+              {section.title}
+            </h1>
+            <p className="font-body italic text-og-dark/60 mt-2 text-lg">
+              {section.description}
+            </p>
+
+            {/* Points badge */}
+            <div className="mt-4">
+              <span className="bg-og-green text-og-dark font-display font-bold text-xs px-3 py-1 rounded-full inline-flex items-center gap-1.5">
+                <svg
+                  className="h-3.5 w-3.5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                {section.points} pts
+              </span>
+            </div>
+
+            {/* Olive divider */}
+            <div className="olive-divider mt-6" />
+          </div>
+        </motion.div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          CONTENT BODY
+          ═══════════════════════════════════════════ */}
+      <section className="relative z-2 px-4 md:px-8 py-12 md:py-16">
+        <div className="max-w-[680px] mx-auto space-y-8">
+          {content.blocks.map((block, i) => (
+            <div key={i}>
+              <ContentBlock block={block} index={i} />
+
+              {/* Photo strip after every 3rd block */}
+              {(i + 1) % 3 === 0 && i < content.blocks.length - 1 && (
+                <div className="photo-strip mt-8 rounded-xl overflow-hidden">
+                  <Image
+                    src={PHOTO_STRIP_IMAGES[Math.floor(i / 3) % PHOTO_STRIP_IMAGES.length]}
+                    alt="Italian cuisine"
+                    width={680}
+                    height={200}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* ─── Content Body ─── */}
-      <section className="relative mx-auto max-w-3xl space-y-8 px-6 py-20 md:px-8 lg:py-28">
-        {content.blocks.map((block, i) => (
-          <ContentBlock key={i} block={block} index={i} />
-        ))}
-      </section>
-
-      {/* ─── Mark Complete ─── */}
-      <section className="relative mx-auto max-w-3xl px-6 pb-12 md:px-8">
+      {/* ═══════════════════════════════════════════
+          MARK COMPLETE — Completion Footer
+          ═══════════════════════════════════════════ */}
+      <section className="relative z-2 px-4 md:px-8 pb-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="flex flex-col items-center rounded-3xl border border-clutch-plum/20 bg-gradient-to-b from-clutch-plum/10 to-clutch-dark px-8 py-14 text-center"
+          className="cream-card p-8 text-center max-w-[680px] mx-auto"
         >
-          <h2 className="font-[family-name:var(--font-display)] text-2xl font-bold text-clutch-cream md:text-3xl">
+          <h2 className="font-display font-bold text-og-dark text-2xl">
             {completed ? "Section Complete!" : "Finished reading?"}
           </h2>
-          <p className="mt-3 max-w-md font-[family-name:var(--font-body)] text-clutch-cream/50">
+          <p className="mt-3 max-w-md mx-auto font-body text-og-dark/50">
             {completed
               ? "Great work. Keep the momentum going."
               : "Mark this section complete to earn your points and unlock the next step."}
           </p>
 
           {/* Button area */}
-          <div className="relative mt-8">
+          <div className="relative mt-8 inline-block">
             {/* Confetti */}
             <AnimatePresence>
               {showConfetti && (
@@ -941,10 +951,10 @@ export default function LearnSectionPage() {
               disabled={completed}
               whileHover={completed ? {} : { scale: 1.05 }}
               whileTap={completed ? {} : { scale: 0.97 }}
-              className={`relative overflow-hidden rounded-full px-10 py-4 font-[family-name:var(--font-display)] text-base font-bold uppercase tracking-widest transition-all duration-300 ${
+              className={`relative overflow-hidden rounded-xl px-8 py-4 font-display font-bold text-base transition-all duration-300 shadow-lg ${
                 completed
-                  ? "cursor-default bg-emerald-500/20 text-emerald-400 ring-2 ring-emerald-500/30"
-                  : "bg-clutch-red text-white shadow-lg shadow-clutch-red/25 hover:shadow-xl hover:shadow-clutch-red/30"
+                  ? "cursor-default bg-og-green/20 text-og-green"
+                  : "bg-og-green text-og-dark hover:shadow-xl"
               }`}
             >
               <AnimatePresence mode="wait">
@@ -975,7 +985,7 @@ export default function LearnSectionPage() {
                     key="action"
                     exit={{ opacity: 0, scale: 0.5 }}
                   >
-                    Mark Section Complete
+                    Mark as Complete
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -989,16 +999,16 @@ export default function LearnSectionPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" as const }}
-                className="mt-5 flex items-center gap-2"
+                className="mt-5 flex items-center justify-center gap-2"
               >
                 <svg
-                  className="h-5 w-5 text-clutch-red"
+                  className="h-5 w-5 text-og-green"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
                   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                 </svg>
-                <span className="font-[family-name:var(--font-display)] text-lg font-bold text-clutch-red">
+                <span className="font-display text-lg font-bold text-og-green">
                   +{section.points} pts
                 </span>
               </motion.div>
@@ -1007,31 +1017,33 @@ export default function LearnSectionPage() {
         </motion.div>
       </section>
 
-      {/* ─── Previous / Next Navigation ─── */}
-      <nav className="mx-auto max-w-3xl px-6 pb-24 pt-8 md:px-8">
-        <div className="flex items-stretch gap-4">
+      {/* ═══════════════════════════════════════════
+          PREVIOUS / NEXT NAVIGATION
+          ═══════════════════════════════════════════ */}
+      <nav className="relative z-2 px-4 md:px-8 pb-24 pt-4">
+        <div className="max-w-[680px] mx-auto flex items-stretch gap-4">
           {/* Previous */}
           {prevSection ? (
             <Link
               href={`/learn/${prevSection.slug}`}
-              className="group flex flex-1 flex-col items-start rounded-2xl border border-clutch-plum/20 bg-clutch-plum/5 p-6 transition-all hover:border-clutch-red/30 hover:bg-clutch-plum/10"
+              className="group flex flex-1 flex-col items-start cream-card p-6 transition-transform hover:-translate-y-0.5"
             >
-              <span className="font-[family-name:var(--font-display)] text-xs font-bold uppercase tracking-widest text-clutch-cream/40">
+              <span className="font-display text-xs font-bold uppercase tracking-widest text-og-dark/40">
                 Previous
               </span>
-              <span className="mt-2 font-[family-name:var(--font-display)] text-lg font-bold text-clutch-cream transition-colors group-hover:text-clutch-red">
+              <span className="mt-2 font-display text-lg font-bold text-og-dark transition-colors group-hover:text-og-green">
                 {prevSection.title}
               </span>
             </Link>
           ) : (
             <Link
-              href="/"
-              className="group flex flex-1 flex-col items-start rounded-2xl border border-clutch-plum/20 bg-clutch-plum/5 p-6 transition-all hover:border-clutch-red/30 hover:bg-clutch-plum/10"
+              href="/dashboard"
+              className="group flex flex-1 flex-col items-start cream-card p-6 transition-transform hover:-translate-y-0.5"
             >
-              <span className="font-[family-name:var(--font-display)] text-xs font-bold uppercase tracking-widest text-clutch-cream/40">
+              <span className="font-display text-xs font-bold uppercase tracking-widest text-og-dark/40">
                 Back to
               </span>
-              <span className="mt-2 font-[family-name:var(--font-display)] text-lg font-bold text-clutch-cream transition-colors group-hover:text-clutch-red">
+              <span className="mt-2 font-display text-lg font-bold text-og-dark transition-colors group-hover:text-og-green">
                 Dashboard
               </span>
             </Link>
@@ -1041,30 +1053,30 @@ export default function LearnSectionPage() {
           {nextSection ? (
             <Link
               href={`/learn/${nextSection.slug}`}
-              className="group flex flex-1 flex-col items-end rounded-2xl border border-clutch-plum/20 bg-clutch-plum/5 p-6 text-right transition-all hover:border-clutch-red/30 hover:bg-clutch-plum/10"
+              className="group flex flex-1 flex-col items-end cream-card p-6 text-right transition-transform hover:-translate-y-0.5"
             >
-              <span className="font-[family-name:var(--font-display)] text-xs font-bold uppercase tracking-widest text-clutch-cream/40">
-                Next
+              <span className="font-display text-xs font-bold uppercase tracking-widest text-og-dark/40">
+                Next Course
               </span>
-              <span className="mt-2 font-[family-name:var(--font-display)] text-lg font-bold text-clutch-cream transition-colors group-hover:text-clutch-red">
+              <span className="mt-2 font-display text-lg font-bold text-og-dark transition-colors group-hover:text-og-green">
                 {nextSection.title}
               </span>
             </Link>
           ) : (
             <Link
-              href="/"
-              className="group flex flex-1 flex-col items-end rounded-2xl border border-clutch-plum/20 bg-clutch-plum/5 p-6 text-right transition-all hover:border-clutch-red/30 hover:bg-clutch-plum/10"
+              href="/dashboard"
+              className="group flex flex-1 flex-col items-end cream-card p-6 text-right transition-transform hover:-translate-y-0.5"
             >
-              <span className="font-[family-name:var(--font-display)] text-xs font-bold uppercase tracking-widest text-clutch-cream/40">
+              <span className="font-display text-xs font-bold uppercase tracking-widest text-og-dark/40">
                 Back to
               </span>
-              <span className="mt-2 font-[family-name:var(--font-display)] text-lg font-bold text-clutch-cream transition-colors group-hover:text-clutch-red">
+              <span className="mt-2 font-display text-lg font-bold text-og-dark transition-colors group-hover:text-og-green">
                 Dashboard
               </span>
             </Link>
           )}
         </div>
       </nav>
-    </main>
+    </div>
   );
 }
